@@ -40,6 +40,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.IEButton = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.OpenFile = new System.Windows.Forms.Button();
+            this.wordTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // InsertButton
@@ -128,19 +131,45 @@
             // 
             // IEButton
             // 
-            this.IEButton.Location = new System.Drawing.Point(270, 422);
+            this.IEButton.Location = new System.Drawing.Point(352, 417);
             this.IEButton.Name = "IEButton";
-            this.IEButton.Size = new System.Drawing.Size(75, 23);
+            this.IEButton.Size = new System.Drawing.Size(108, 23);
             this.IEButton.TabIndex = 8;
             this.IEButton.Text = "IE Button";
             this.IEButton.UseVisualStyleBackColor = true;
             this.IEButton.Click += new System.EventHandler(this.IEButton_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // OpenFile
+            // 
+            this.OpenFile.Location = new System.Drawing.Point(466, 417);
+            this.OpenFile.Name = "OpenFile";
+            this.OpenFile.Size = new System.Drawing.Size(108, 23);
+            this.OpenFile.TabIndex = 9;
+            this.OpenFile.Text = "Open File";
+            this.OpenFile.UseVisualStyleBackColor = true;
+            this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
+            // 
+            // wordTest
+            // 
+            this.wordTest.Location = new System.Drawing.Point(136, 417);
+            this.wordTest.Name = "wordTest";
+            this.wordTest.Size = new System.Drawing.Size(108, 23);
+            this.wordTest.TabIndex = 10;
+            this.wordTest.Text = "word test";
+            this.wordTest.UseVisualStyleBackColor = true;
+            this.wordTest.Click += new System.EventHandler(this.wordTest_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 481);
+            this.Controls.Add(this.wordTest);
+            this.Controls.Add(this.OpenFile);
             this.Controls.Add(this.IEButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -172,6 +201,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button IEButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button OpenFile;
+        private System.Windows.Forms.Button wordTest;
     }
 }
 
