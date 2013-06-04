@@ -26,6 +26,12 @@ namespace WindowsFormsApplication1test
         String created_folder;
         String opened_path;
 
+        object strFileName;
+        Object Nothing;
+        Microsoft.Office.Interop.Word.Application myWordApp = new Word.Application();
+        Word.Document myWordDoc;
+        string strContent = " ";   
+
         public Form1()
         {
             InitializeComponent();
@@ -62,8 +68,6 @@ namespace WindowsFormsApplication1test
                 show_together = "\n"+ show_doc + "\n" + show_com;
                 MessageBox.Show(show_together);
             }
-            saved_doc_list.Clear();
-            saved_com_list.Clear();
         }
 
         private void get_document(String str)
@@ -334,6 +338,120 @@ namespace WindowsFormsApplication1test
             //Close this form.
             this.Close();
 
+        }
+
+        private void anotherWordTest_Click(object sender, EventArgs e)
+        {
+            createWord();
+            AddContent(strFileName.ToString());
+        }
+
+        private void createWord()
+        {
+            //strFileName = System.Windows.Forms.Application.StartupPath + "\\test.doc ";
+            strFileName = created_folder + "\\test.doc ";
+            MessageBox.Show(strFileName.ToString());
+            if (System.IO.File.Exists((string)strFileName))
+                System.IO.File.Delete((string)strFileName);
+            Object Nothing = System.Reflection.Missing.Value;
+            myWordDoc = myWordApp.Documents.Add(ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing);
+
+            #region   将数据库中读取得数据写入到word文件中
+
+            int len_doc = saved_doc_list.Count;
+            for (int i = 0; i < len_doc; i++ )
+            {
+                strContent = "你好Zitat\n\n\r ";
+                myWordDoc.Paragraphs.Last.Range.Text = strContent;
+
+                strContent = saved_doc_list[i] + "\n\n\r";
+                myWordDoc.Paragraphs.Last.Range.Text = strContent;
+
+                strContent = "这是测试程序commentar\n\n\r ";
+                myWordDoc.Paragraphs.Last.Range.Text = strContent;
+
+                strContent = saved_com_list[i] + "\n\n\r";
+                myWordDoc.Paragraphs.Last.Range.Text = strContent;
+            }
+
+            saved_doc_list.Clear();
+            saved_com_list.Clear();
+            #endregion
+
+            //将WordDoc文档对象的内容保存为DOC文档  
+            myWordDoc.SaveAs(ref   strFileName, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing);
+            //关闭WordDoc文档对象  
+            myWordDoc.Close(ref   Nothing, ref   Nothing, ref   Nothing);
+            //关闭WordApp组件对象  
+            myWordApp.Quit(ref   Nothing, ref   Nothing, ref   Nothing);
+
+            MessageBox.Show(strFileName + "\r\n " + "创建成功 ");
+            
+        }
+
+        public void AddContent(string filePath)
+        {
+            try
+            {
+
+                Object oMissing = System.Reflection.Missing.Value;
+                Microsoft.Office.Interop.Word._Application WordApp = new Word.Application();
+                WordApp.Visible = true;
+                object filename = filePath;
+                Microsoft.Office.Interop.Word._Document WordDoc = WordApp.Documents.Open(ref filename, ref oMissing,
+                    ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                    ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing);
+
+                //设置居左
+                WordApp.Selection.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphLeft;
+
+                //设置文档的行间距
+                WordApp.Selection.ParagraphFormat.LineSpacing = 15f;
+                //插入段落
+                //WordApp.Selection.TypeParagraph();
+                Microsoft.Office.Interop.Word.Paragraph para;
+                para = WordDoc.Content.Paragraphs.Add(ref oMissing);
+                //正常格式
+                para.Range.Text = "This is paragraph 1";
+                //para.Range.Font.Bold = 2;
+                //para.Range.Font.Color = WdColor.wdColorRed;
+                //para.Range.Font.Italic = 2;
+                para.Range.InsertParagraphAfter();
+
+                para.Range.Text = "This is paragraph 2";
+                para.Range.InsertParagraphAfter();
+
+                //插入Hyperlink
+                Microsoft.Office.Interop.Word.Selection mySelection = WordApp.ActiveWindow.Selection;
+                mySelection.Start = 9999;
+                mySelection.End = 9999;
+                Microsoft.Office.Interop.Word.Range myRange = mySelection.Range;
+
+                Microsoft.Office.Interop.Word.Hyperlinks myLinks = WordDoc.Hyperlinks;
+                //object linkAddr = @"http://www.cnblogs.com/lantionzy";
+                object test_file_Path = created_folder + "\\test2.docx ";
+                object linkAddr = test_file_Path;
+
+                Microsoft.Office.Interop.Word.Hyperlink myLink = myLinks.Add(myRange, ref linkAddr,
+                    ref oMissing);
+                WordApp.ActiveWindow.Selection.InsertAfter("\n");
+
+                //落款
+                WordDoc.Paragraphs.Last.Range.Text = "文档创建时间：" + DateTime.Now.ToString();
+                WordDoc.Paragraphs.Last.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphRight;
+
+                //保存
+                WordDoc.Save();
+                WordDoc.Close(ref oMissing, ref oMissing, ref oMissing);
+                WordApp.Quit(ref oMissing, ref oMissing, ref oMissing);
+                //return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                //return false;
+            }
         }
     }
 }

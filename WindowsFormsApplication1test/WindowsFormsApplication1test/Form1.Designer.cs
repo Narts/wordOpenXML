@@ -43,6 +43,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.OpenFile = new System.Windows.Forms.Button();
             this.wordTest = new System.Windows.Forms.Button();
+            this.anotherWordTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // InsertButton
@@ -163,11 +164,22 @@
             this.wordTest.UseVisualStyleBackColor = true;
             this.wordTest.Click += new System.EventHandler(this.wordTest_Click);
             // 
+            // anotherWordTest
+            // 
+            this.anotherWordTest.Location = new System.Drawing.Point(18, 417);
+            this.anotherWordTest.Name = "anotherWordTest";
+            this.anotherWordTest.Size = new System.Drawing.Size(108, 23);
+            this.anotherWordTest.TabIndex = 11;
+            this.anotherWordTest.Text = "another word Test";
+            this.anotherWordTest.UseVisualStyleBackColor = true;
+            this.anotherWordTest.Click += new System.EventHandler(this.anotherWordTest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 481);
+            this.Controls.Add(this.anotherWordTest);
             this.Controls.Add(this.wordTest);
             this.Controls.Add(this.OpenFile);
             this.Controls.Add(this.IEButton);
@@ -204,6 +216,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button OpenFile;
         private System.Windows.Forms.Button wordTest;
+        private System.Windows.Forms.Button anotherWordTest;
     }
 }
 
