@@ -11,7 +11,9 @@ using System.Diagnostics;
 using System.Net;
 using System.IO;
 using Word = Microsoft.Office.Interop.Word;
+using MSOT = Microsoft.Office.Tools;
 using System.Reflection;
+using MSOTW = Microsoft.Office.Tools.Word;
 
 
 namespace WindowsFormsApplication1test
@@ -30,6 +32,7 @@ namespace WindowsFormsApplication1test
         Object Nothing;
         Microsoft.Office.Interop.Word.Application myWordApp = new Word.Application();
         Word.Document myWordDoc;
+        Word.Document anotherWordDoc;
         string strContent = " ";   
 
         public Form1()
@@ -139,19 +142,6 @@ namespace WindowsFormsApplication1test
 
         }
 
-        private void IEButton_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://www.baidu.com");
-            Process[] current_Process = Process.GetProcessesByName("IEXPLORE");
-            foreach(var item in current_Process)
-            {
-                //String full_path = item.Modules[0].FileName;
-                //String full_path_test = Path.GetFullPath(item.ToString());
-                //String full_path_test = System.IO.Path.GetDirectoryName(item.ProcessName);
-                //MessageBox.Show(full_path);
-            }
-        }
-
         private void OpenFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -195,152 +185,7 @@ namespace WindowsFormsApplication1test
 
         }
 
-        private void wordTest_Click(object sender, EventArgs e)
-        {
-            object oMissing = System.Reflection.Missing.Value;
-            object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
-
-            //Start Word and create a new document.
-            Word._Application oWord;
-            Word._Document oDoc;
-            oWord = new Word.Application();
-            oWord.Visible = true;
-            oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
-                ref oMissing, ref oMissing);
-
-            //Insert a paragraph at the beginning of the document.
-            Word.Paragraph oPara1;
-            oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-            oPara1.Range.Text = "Heading 1";
-            oPara1.Range.Font.Bold = 1;
-            oPara1.Format.SpaceAfter = 24;    //24 pt spacing after paragraph.
-            oPara1.Range.InsertParagraphAfter();
-
-            //Insert a paragraph at the end of the document.
-            Word.Paragraph oPara2;
-            object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
-            oPara2.Range.Text = "Heading 2";
-            oPara2.Format.SpaceAfter = 6;
-            oPara2.Range.InsertParagraphAfter();
-
-            //Insert another paragraph.
-            Word.Paragraph oPara3;
-            oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara3 = oDoc.Content.Paragraphs.Add(ref oRng);
-            oPara3.Range.Text = "This is a sentence of normal text. Now here is a table:";
-            oPara3.Range.Font.Bold = 0;
-            oPara3.Format.SpaceAfter = 24;
-            oPara3.Range.InsertParagraphAfter();
-
-            //Insert a 3 x 5 table, fill it with data, and make the first row
-            //bold and italic.
-            Word.Table oTable;
-            Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, 3, 5, ref oMissing, ref oMissing);
-            oTable.Range.ParagraphFormat.SpaceAfter = 6;
-            int r, c;
-            string strText;
-            for (r = 1; r <= 3; r++)
-                for (c = 1; c <= 5; c++)
-                {
-                    strText = "r" + r + "c" + c;
-                    oTable.Cell(r, c).Range.Text = strText;
-                }
-            oTable.Rows[1].Range.Font.Bold = 1;
-            oTable.Rows[1].Range.Font.Italic = 1;
-
-            //Add some text after the table.
-            Word.Paragraph oPara4;
-            oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oPara4 = oDoc.Content.Paragraphs.Add(ref oRng);
-            oPara4.Range.InsertParagraphBefore();
-            oPara4.Range.Text = "And here's another table:";
-            oPara4.Format.SpaceAfter = 24;
-            oPara4.Range.InsertParagraphAfter();
-
-            //Insert a 5 x 2 table, fill it with data, and change the column widths.
-            wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oTable = oDoc.Tables.Add(wrdRng, 5, 2, ref oMissing, ref oMissing);
-            oTable.Range.ParagraphFormat.SpaceAfter = 6;
-            for (r = 1; r <= 5; r++)
-                for (c = 1; c <= 2; c++)
-                {
-                    strText = "r" + r + "c" + c;
-                    oTable.Cell(r, c).Range.Text = strText;
-                }
-            oTable.Columns[1].Width = oWord.InchesToPoints(2); //Change width of columns 1 & 2
-            oTable.Columns[2].Width = oWord.InchesToPoints(3);
-
-            //Keep inserting text. When you get to 7 inches from top of the
-            //document, insert a hard page break.
-            object oPos;
-            double dPos = oWord.InchesToPoints(7);
-            oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range.InsertParagraphAfter();
-            do
-            {
-                wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                wrdRng.ParagraphFormat.SpaceAfter = 6;
-                wrdRng.InsertAfter("A line of text");
-                wrdRng.InsertParagraphAfter();
-                oPos = wrdRng.get_Information
-                               (Word.WdInformation.wdVerticalPositionRelativeToPage);
-            }
-            while (dPos >= Convert.ToDouble(oPos));
-            object oCollapseEnd = Word.WdCollapseDirection.wdCollapseEnd;
-            object oPageBreak = Word.WdBreakType.wdPageBreak;
-            wrdRng.Collapse(ref oCollapseEnd);
-            wrdRng.InsertBreak(ref oPageBreak);
-            wrdRng.Collapse(ref oCollapseEnd);
-            wrdRng.InsertAfter("We're now on page 2. Here's my chart:");
-            wrdRng.InsertParagraphAfter();
-
-            //Insert a chart.
-            Word.InlineShape oShape;
-            object oClassType = "MSGraph.Chart.8";
-            wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            oShape = wrdRng.InlineShapes.AddOLEObject(ref oClassType, ref oMissing,
-                ref oMissing, ref oMissing, ref oMissing,
-                ref oMissing, ref oMissing, ref oMissing);
-
-            //Demonstrate use of late bound oChart and oChartApp objects to
-            //manipulate the chart object with MSGraph.
-            object oChart;
-            object oChartApp;
-            oChart = oShape.OLEFormat.Object;
-            oChartApp = oChart.GetType().InvokeMember("Application",
-                BindingFlags.GetProperty, null, oChart, null);
-
-            //Change the chart type to Line.
-            object[] Parameters = new Object[1];
-            Parameters[0] = 4; //xlLine = 4
-            oChart.GetType().InvokeMember("ChartType", BindingFlags.SetProperty,
-                null, oChart, Parameters);
-
-            //Update the chart image and quit MSGraph.
-            oChartApp.GetType().InvokeMember("Update",
-                BindingFlags.InvokeMethod, null, oChartApp, null);
-            oChartApp.GetType().InvokeMember("Quit",
-                BindingFlags.InvokeMethod, null, oChartApp, null);
-            //... If desired, you can proceed from here using the Microsoft Graph 
-            //Object model on the oChart and oChartApp objects to make additional
-            //changes to the chart.
-
-            //Set the width of the chart.
-            oShape.Width = oWord.InchesToPoints(6.25f);
-            oShape.Height = oWord.InchesToPoints(3.57f);
-
-            //Add text after the chart.
-            wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-            wrdRng.InsertParagraphAfter();
-            wrdRng.InsertAfter("THE END.");
-
-            //Close this form.
-            this.Close();
-
-        }
-
-        private void anotherWordTest_Click(object sender, EventArgs e)
+        private void writeInDoc_Click(object sender, EventArgs e)
         {
             createWord();
             AddContent(strFileName.ToString());
@@ -349,14 +194,14 @@ namespace WindowsFormsApplication1test
         private void createWord()
         {
             //strFileName = System.Windows.Forms.Application.StartupPath + "\\test.doc ";
-            strFileName = created_folder + "\\test.doc ";
+            strFileName = created_folder + "\\test.docx";
             MessageBox.Show(strFileName.ToString());
             if (System.IO.File.Exists((string)strFileName))
                 System.IO.File.Delete((string)strFileName);
             Object Nothing = System.Reflection.Missing.Value;
             myWordDoc = myWordApp.Documents.Add(ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing);
 
-            #region   将数据库中读取得数据写入到word文件中
+            #region   将数据写入到word文件中
 
             int len_doc = saved_doc_list.Count;
             for (int i = 0; i < len_doc; i++ )
@@ -429,7 +274,7 @@ namespace WindowsFormsApplication1test
 
                 Microsoft.Office.Interop.Word.Hyperlinks myLinks = WordDoc.Hyperlinks;
                 //object linkAddr = @"http://www.cnblogs.com/lantionzy";
-                object test_file_Path = created_folder + "\\test2.docx ";
+                object test_file_Path = created_folder +"\\test2.docx##" + "aora";
                 object linkAddr = test_file_Path;
 
                 Microsoft.Office.Interop.Word.Hyperlink myLink = myLinks.Add(myRange, ref linkAddr,
@@ -452,6 +297,75 @@ namespace WindowsFormsApplication1test
                 Console.WriteLine(e.StackTrace);
                 //return false;
             }
+        }
+
+        public void AddBookmarks(string targetDoc, int index)
+        {
+            //strFileName = System.Windows.Forms.Application.StartupPath + "\\test.doc ";
+            strFileName = created_folder + "\\test2.docx";
+            //MessageBox.Show(targetDoc.ToString());
+            //if (System.IO.File.Exists((string)targetDoc))
+                //System.IO.File.Delete((string)targetDoc);
+            Object Nothing = System.Reflection.Missing.Value;
+            anotherWordDoc = myWordApp.Documents.Open(ref strFileName,
+                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            object findText = targetDoc;
+
+            Word.Range rng = anotherWordDoc.Range();
+
+            rng.Find.ClearFormatting();
+
+            if (rng.Find.Execute(ref findText,
+                ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                ref Nothing, ref Nothing))
+            {
+                
+                // insert_one_bookmark(rng, index, anotherWordDoc);
+                int start = rng.Start;
+                int end = rng.End;
+                object bookmark_rng = anotherWordDoc.Range(start, end);
+                MessageBox.Show(index.ToString());
+                MessageBox.Show(start.ToString(), end.ToString());
+                string bookmark_name = index.ToString();
+                anotherWordDoc.Bookmarks.Add(bookmark_name, ref bookmark_rng);
+            }
+            else
+            {
+                MessageBox.Show("Text not found.");
+            }
+
+            rng.Select(); 
+        }
+
+        private void manipulate_word_Click(object sender, EventArgs e)
+        {
+            String show_doc = "";
+
+            for (int i = 0; i < saved_doc_list.Count(); i++)
+            {
+                show_doc = saved_doc_list[i];
+                AddBookmarks(show_doc, i);
+            }
+
+            //string strFileName = created_folder + "\\test2.docx";
+            //object objFileName = @strFileName;
+            
+        }
+
+        public void insert_one_bookmark(object rng, int index, Word.Document anotherWordDoc)
+        {
+            //Microsoft.Office.Interop.Word.Application myWord = new Microsoft.Office.Interop.Word.Application();
+            string bookmark_name =  index.ToString();
+            anotherWordDoc.Bookmarks.Add(bookmark_name, ref rng);
+            //myWord.ActiveDocument.Bookmarks.Add(bookmark_name, ref rng);
+
+            //MSOT.Word.Bookmark bookmark;
+            //bookmark = document.Bookmarks
+            
+            //document.Bookmarks.Add(bookmark_name, ref rng);
         }
     }
 }
