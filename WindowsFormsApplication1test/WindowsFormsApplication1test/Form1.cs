@@ -299,20 +299,10 @@ namespace WindowsFormsApplication1test
             }
         }
 
-        public void AddBookmarks(string targetDoc, int index)
+        public void AddBookmarks(string targetDoc, int index, Word.Document anotherWordDoc, object strFileName)
         {
-            //strFileName = System.Windows.Forms.Application.StartupPath + "\\test.doc ";
-            strFileName = created_folder + "\\test2.docx";
-            //MessageBox.Show(targetDoc.ToString());
-            //if (System.IO.File.Exists((string)targetDoc))
-                //System.IO.File.Delete((string)targetDoc);
-            Object Nothing = System.Reflection.Missing.Value;
-            anotherWordDoc = myWordApp.Documents.Open(ref strFileName,
-                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
-                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
-                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
             object findText = targetDoc;
-
+            Object Nothing = System.Reflection.Missing.Value;
             Word.Range rng = anotherWordDoc.Range();
 
             rng.Find.ClearFormatting();
@@ -329,25 +319,42 @@ namespace WindowsFormsApplication1test
                 object bookmark_rng = anotherWordDoc.Range(start, end);
                 MessageBox.Show(index.ToString());
                 MessageBox.Show(start.ToString(), end.ToString());
-                string bookmark_name = index.ToString();
+                string bookmark_name = "testsBookmarks" + index.ToString(); //
                 anotherWordDoc.Bookmarks.Add(bookmark_name, ref bookmark_rng);
+                //将WordDoc文档对象的内容保存为DOC文档  
+                anotherWordDoc.SaveAs(ref   strFileName, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing, ref   Nothing);
+                //关闭WordDoc文档对象  
+                anotherWordDoc.Close(ref   Nothing, ref   Nothing, ref   Nothing);
+                //关闭WordApp组件对象  
+                myWordApp.Quit(ref   Nothing, ref   Nothing, ref   Nothing);
             }
             else
             {
                 MessageBox.Show("Text not found.");
             }
 
-            rng.Select(); 
+            //rng.Select(); 
         }
 
         private void manipulate_word_Click(object sender, EventArgs e)
         {
             String show_doc = "";
+            //strFileName = System.Windows.Forms.Application.StartupPath + "\\test.doc ";
+            strFileName = created_folder + "\\test2-Kopies.docx";
+            //MessageBox.Show(targetDoc.ToString());
+            //if (System.IO.File.Exists((string)targetDoc))
+            //System.IO.File.Delete((string)targetDoc);
+            Object Nothing = System.Reflection.Missing.Value;
+            anotherWordDoc = myWordApp.Documents.Open(ref strFileName,
+                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+
 
             for (int i = 0; i < saved_doc_list.Count(); i++)
             {
                 show_doc = saved_doc_list[i];
-                AddBookmarks(show_doc, i);
+                AddBookmarks(show_doc, i, anotherWordDoc, strFileName);
             }
 
             //string strFileName = created_folder + "\\test2.docx";
