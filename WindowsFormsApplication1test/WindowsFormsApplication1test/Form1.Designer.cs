@@ -31,8 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.InsertButton = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.BuildButton = new System.Windows.Forms.Button();
-            this.SaveFile = new System.Windows.Forms.Button();
+            this.BuildSummaryBtn = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.CreateFolderButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -41,7 +40,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.OpenFile = new System.Windows.Forms.Button();
-            this.writeInDoc = new System.Windows.Forms.Button();
             this.manipulate_word = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -64,25 +62,15 @@
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
-            // BuildButton
+            // BuildSummaryBtn
             // 
-            this.BuildButton.Location = new System.Drawing.Point(136, 446);
-            this.BuildButton.Name = "BuildButton";
-            this.BuildButton.Size = new System.Drawing.Size(108, 23);
-            this.BuildButton.TabIndex = 2;
-            this.BuildButton.Text = "Build Summary";
-            this.BuildButton.UseVisualStyleBackColor = true;
-            this.BuildButton.Click += new System.EventHandler(this.BuildButton_Click);
-            // 
-            // SaveFile
-            // 
-            this.SaveFile.Location = new System.Drawing.Point(352, 446);
-            this.SaveFile.Name = "SaveFile";
-            this.SaveFile.Size = new System.Drawing.Size(108, 23);
-            this.SaveFile.TabIndex = 3;
-            this.SaveFile.Text = "Save File";
-            this.SaveFile.UseVisualStyleBackColor = true;
-            this.SaveFile.Click += new System.EventHandler(this.SaveFileButton_Click);
+            this.BuildSummaryBtn.Location = new System.Drawing.Point(352, 446);
+            this.BuildSummaryBtn.Name = "BuildSummaryBtn";
+            this.BuildSummaryBtn.Size = new System.Drawing.Size(108, 23);
+            this.BuildSummaryBtn.TabIndex = 3;
+            this.BuildSummaryBtn.Text = "Build Summary";
+            this.BuildSummaryBtn.UseVisualStyleBackColor = true;
+            this.BuildSummaryBtn.Click += new System.EventHandler(this.BuildSummaryBtn_Click);
             // 
             // saveFileDialog1
             // 
@@ -143,16 +131,6 @@
             this.OpenFile.UseVisualStyleBackColor = true;
             this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
-            // writeInDoc
-            // 
-            this.writeInDoc.Location = new System.Drawing.Point(18, 417);
-            this.writeInDoc.Name = "writeInDoc";
-            this.writeInDoc.Size = new System.Drawing.Size(108, 23);
-            this.writeInDoc.TabIndex = 11;
-            this.writeInDoc.Text = "Write in Doc";
-            this.writeInDoc.UseVisualStyleBackColor = true;
-            this.writeInDoc.Click += new System.EventHandler(this.writeInDoc_Click);
-            // 
             // manipulate_word
             // 
             this.manipulate_word.Location = new System.Drawing.Point(136, 417);
@@ -169,14 +147,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 481);
             this.Controls.Add(this.manipulate_word);
-            this.Controls.Add(this.writeInDoc);
             this.Controls.Add(this.OpenFile);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.CreateFolderButton);
-            this.Controls.Add(this.SaveFile);
-            this.Controls.Add(this.BuildButton);
+            this.Controls.Add(this.BuildSummaryBtn);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.InsertButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -192,8 +168,7 @@
 
         private System.Windows.Forms.Button InsertButton;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Button BuildButton;
-        private System.Windows.Forms.Button SaveFile;
+        private System.Windows.Forms.Button BuildSummaryBtn;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button CreateFolderButton;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -202,7 +177,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button OpenFile;
-        private System.Windows.Forms.Button writeInDoc;
         private System.Windows.Forms.Button manipulate_word;
     }
 }
