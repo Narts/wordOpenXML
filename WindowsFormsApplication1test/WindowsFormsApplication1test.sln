@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1test", "WindowsFormsApplication1test\WindowsFormsApplication1test.csproj", "{E751C7E8-FD9E-4531-89FD-E9281DF7686C}"
 EndProject
 Global

@@ -40,12 +40,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.OpenFile = new System.Windows.Forms.Button();
-            this.manipulate_word = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // InsertButton
             // 
-            this.InsertButton.Location = new System.Drawing.Point(18, 446);
+            this.InsertButton.Location = new System.Drawing.Point(375, 417);
             this.InsertButton.Name = "InsertButton";
             this.InsertButton.Size = new System.Drawing.Size(108, 23);
             this.InsertButton.TabIndex = 0;
@@ -64,7 +63,7 @@
             // 
             // BuildSummaryBtn
             // 
-            this.BuildSummaryBtn.Location = new System.Drawing.Point(352, 446);
+            this.BuildSummaryBtn.Location = new System.Drawing.Point(375, 446);
             this.BuildSummaryBtn.Name = "BuildSummaryBtn";
             this.BuildSummaryBtn.Size = new System.Drawing.Size(108, 23);
             this.BuildSummaryBtn.TabIndex = 3;
@@ -78,7 +77,7 @@
             // 
             // CreateFolderButton
             // 
-            this.CreateFolderButton.Location = new System.Drawing.Point(466, 446);
+            this.CreateFolderButton.Location = new System.Drawing.Point(79, 417);
             this.CreateFolderButton.Name = "CreateFolderButton";
             this.CreateFolderButton.Size = new System.Drawing.Size(108, 23);
             this.CreateFolderButton.TabIndex = 4;
@@ -113,9 +112,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(15, 215);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Commentar";
+            this.label2.Text = "Comment";
             // 
             // openFileDialog1
             // 
@@ -123,7 +122,7 @@
             // 
             // OpenFile
             // 
-            this.OpenFile.Location = new System.Drawing.Point(466, 417);
+            this.OpenFile.Location = new System.Drawing.Point(79, 446);
             this.OpenFile.Name = "OpenFile";
             this.OpenFile.Size = new System.Drawing.Size(108, 23);
             this.OpenFile.TabIndex = 9;
@@ -131,22 +130,11 @@
             this.OpenFile.UseVisualStyleBackColor = true;
             this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
-            // manipulate_word
-            // 
-            this.manipulate_word.Location = new System.Drawing.Point(136, 417);
-            this.manipulate_word.Name = "manipulate_word";
-            this.manipulate_word.Size = new System.Drawing.Size(108, 23);
-            this.manipulate_word.TabIndex = 12;
-            this.manipulate_word.Text = "maniputale_word";
-            this.manipulate_word.UseVisualStyleBackColor = true;
-            this.manipulate_word.Click += new System.EventHandler(this.manipulate_word_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 481);
-            this.Controls.Add(this.manipulate_word);
             this.Controls.Add(this.OpenFile);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -177,7 +165,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button OpenFile;
-        private System.Windows.Forms.Button manipulate_word;
     }
 }
 
