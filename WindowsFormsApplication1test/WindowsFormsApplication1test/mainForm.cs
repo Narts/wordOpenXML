@@ -180,12 +180,13 @@ namespace WindowsFormsApplication1test
                 //MessageBox.Show(opened_path);
                 utilities.openWordFile(opened_file);
                 //System.Diagnostics.Process.Start("WINWORD", opened_file);
+                string saved_old_folder = "";
                 if (!this.newSmry)
                 {
                     int end_path = this.saved_path.LastIndexOf('\\');
-                    this.created_folder = saved_path.Substring(0, end_path);
+                    saved_old_folder = saved_path.Substring(0, end_path);
                 }
-                bool cp_success = utilities.copyFileToRepository(doc_name, opened_path, this.created_folder);
+                bool cp_success = utilities.copyFileToRepository(doc_name, opened_path, saved_old_folder);
                 if (!cp_success) 
                 {
                     MessageBox.Show("This file already exists");

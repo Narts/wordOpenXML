@@ -52,24 +52,11 @@ namespace WindowsFormsApplication1test
             openFileDialog1.RestoreDirectory = true;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string address = openFileDialog1.FileName;
+                this.address = openFileDialog1.FileName;
+                int end_path = this.address.LastIndexOf('\\');
+                string created_folder = address.Substring(0, end_path);
+                utilities.setCreatedFolder(created_folder);
                 this.DialogResult = DialogResult.OK; 
-                //String[] names = opened_file.Split('\\');
-                //int len = names.Length;
-                //String doc_name = names[len - 1];
-                //string opened_file_name = doc_name;
-                //int len_doc_name = doc_name.Length;
-                //string opened_path = opened_file.Substring(0, opened_file.Length - len_doc_name);
-                ////MessageBox.Show(opened_path);
-                //utilities.openWordFile(opened_file);
-                ////System.Diagnostics.Process.Start("WINWORD", opened_file);
-                //bool cp_success = utilities.copyFileToRepository(doc_name, opened_path, created_folder);
-                //if (!cp_success)
-                //{
-                //    MessageBox.Show("This file already exists");
-                //}
-
-                //copy_file_to_reporsitory(doc_name, opened_path, created_folder);
             }
             
         }
