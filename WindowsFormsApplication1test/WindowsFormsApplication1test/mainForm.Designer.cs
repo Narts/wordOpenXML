@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApplication1test
 {
-    partial class Form1
+    partial class mainForm
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.InsertButton = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.BuildSummaryBtn = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.CreateFolderButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,7 +43,7 @@
             // 
             // InsertButton
             // 
-            this.InsertButton.Location = new System.Drawing.Point(375, 417);
+            this.InsertButton.Location = new System.Drawing.Point(240, 433);
             this.InsertButton.Name = "InsertButton";
             this.InsertButton.Size = new System.Drawing.Size(108, 23);
             this.InsertButton.TabIndex = 0;
@@ -63,7 +62,7 @@
             // 
             // BuildSummaryBtn
             // 
-            this.BuildSummaryBtn.Location = new System.Drawing.Point(375, 446);
+            this.BuildSummaryBtn.Location = new System.Drawing.Point(400, 433);
             this.BuildSummaryBtn.Name = "BuildSummaryBtn";
             this.BuildSummaryBtn.Size = new System.Drawing.Size(108, 23);
             this.BuildSummaryBtn.TabIndex = 3;
@@ -74,16 +73,6 @@
             // saveFileDialog1
             // 
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
-            // 
-            // CreateFolderButton
-            // 
-            this.CreateFolderButton.Location = new System.Drawing.Point(79, 417);
-            this.CreateFolderButton.Name = "CreateFolderButton";
-            this.CreateFolderButton.Size = new System.Drawing.Size(108, 23);
-            this.CreateFolderButton.TabIndex = 4;
-            this.CreateFolderButton.Text = "Create Folder";
-            this.CreateFolderButton.UseVisualStyleBackColor = true;
-            this.CreateFolderButton.Click += new System.EventHandler(this.CreateFolderButton_Click);
             // 
             // folderBrowserDialog1
             // 
@@ -122,7 +111,7 @@
             // 
             // OpenFile
             // 
-            this.OpenFile.Location = new System.Drawing.Point(79, 446);
+            this.OpenFile.Location = new System.Drawing.Point(77, 433);
             this.OpenFile.Name = "OpenFile";
             this.OpenFile.Size = new System.Drawing.Size(108, 23);
             this.OpenFile.TabIndex = 9;
@@ -130,7 +119,7 @@
             this.OpenFile.UseVisualStyleBackColor = true;
             this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
-            // Form1
+            // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -139,12 +128,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox2);
-            this.Controls.Add(this.CreateFolderButton);
             this.Controls.Add(this.BuildSummaryBtn);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.InsertButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "mainForm";
             this.Text = "Summary Tool";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
@@ -158,7 +146,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button BuildSummaryBtn;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.Button CreateFolderButton;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Label label1;

@@ -18,18 +18,19 @@ using MSOTW = Microsoft.Office.Tools.Word;
 
 namespace WindowsFormsApplication1test
 {
-    public partial class Form1 : Form
+    public partial class mainForm : Form
     {
-        String saved_document;
-        String saved_commentar;
+        string saved_document;
+        string saved_commentar;
         public List<string> saved_doc_list = new List<string>();
         public List<string> saved_com_list = new List<string>();
         //public List<string> bookmark_list = new List<string>();
-        String saved_path;
-        String created_folder;
-        String opened_file_name;
-        String opened_path;
-        Utilities utilities = new Utilities();
+        string saved_path;
+        string created_folder;
+        string opened_file_name;
+        string opened_path;
+        bool newSmry;
+        Utilities utilities = Utilities.CreateInstance();
 
 
         //object strFileName;
@@ -38,15 +39,25 @@ namespace WindowsFormsApplication1test
         //Word.Document myWordDoc;
         //Word.Document anotherWordDoc;  
 
-        public Form1()
+        public mainForm(string address, bool newSmry)
         {
             InitializeComponent();
+            this.newSmry = newSmry;
+            if (newSmry)
+            {
+                this.created_folder = address;
+            }
+            else 
+            {
+                this.saved_path = address;
+            }
+            
         }
 
         private void InsertButton_Click(object sender, EventArgs e)
         {
-            String doc = saved_document;
-            String com = saved_commentar;
+            string doc = saved_document;
+            string com = saved_commentar;
             if (doc == null || com == null)
             {
                 MessageBox.Show("please insert both content and comment first.");
@@ -71,30 +82,40 @@ namespace WindowsFormsApplication1test
 
         private void BuildSummaryBtn_Click(object sender, EventArgs e)
         {
-            if (saved_doc_list.Count == 0 || saved_com_list.Count == 0 || created_folder == null || opened_file_name == null)
+            if (saved_doc_list.Count == 0 || saved_com_list.Count == 0 || opened_file_name == null)
             {
-                MessageBox.Show("Please\n 1. Create folder via 'Create Folder' button; \n 2. Open file via 'Open File' button;\n 3. Insert content and comment via 'Insert Content' button;\n before build a summary.");
+                MessageBox.Show("Please\n 1. Open file via 'Open File' button;\n 2. Insert content and comment via 'Insert Content' button;\n before build a summary.");
             }
             else 
             {
                 utilities.setSavedDocList(saved_doc_list);
                 utilities.setSavedComList(saved_com_list);
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.InitialDirectory = @"C:\";
-                saveFileDialog1.Title = "Save Files";
-                //saveFileDialog1.CheckFileExists = true;
-                saveFileDialog1.CheckPathExists = true;
-                saveFileDialog1.DefaultExt = "txt";
-                saveFileDialog1.Filter = "Text files (*.txt)|*.txt|Microsoft Word (*.docx)|*.docx|All files (*.*)|*.*";
-                saveFileDialog1.FilterIndex = 2;
-                saveFileDialog1.RestoreDirectory = true;
-
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                if (this.newSmry)
                 {
-                    saved_path = saveFileDialog1.FileName;
-                    MessageBox.Show(saved_path);
-                    utilities.createWord(saved_path);
+                    MessageBox.Show(this.newSmry.ToString());
+                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                    saveFileDialog1.InitialDirectory = created_folder;
+                    saveFileDialog1.Title = "Save Files";
+                    //saveFileDialog1.CheckFileExists = true;
+                    saveFileDialog1.CheckPathExists = true;
+                    saveFileDialog1.DefaultExt = "txt";
+                    saveFileDialog1.Filter = "Text files (*.txt)|*.txt|Microsoft Word (*.docx)|*.docx|All files (*.*)|*.*";
+                    saveFileDialog1.FilterIndex = 2;
+                    saveFileDialog1.RestoreDirectory = true;
+
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        saved_path = saveFileDialog1.FileName;
+                        MessageBox.Show(saved_path);
+                        utilities.createWord(saved_path);
+                    }
                 }
+                else 
+                {
+                    MessageBox.Show("newSmry == false");
+                    utilities.processWord(saved_path);
+                }
+
             } 
         }
 
@@ -103,20 +124,20 @@ namespace WindowsFormsApplication1test
 
         }
 
-        private void CreateFolderButton_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog folderDlg = new FolderBrowserDialog();
-            folderDlg.ShowNewFolderButton = true;
-            // Show the FolderBrowserDialog. 
-            DialogResult result = folderDlg.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                created_folder = folderDlg.SelectedPath;
-                utilities.setCreatedFolder(created_folder);
-                MessageBox.Show(created_folder);
-                Environment.SpecialFolder root = folderDlg.RootFolder;
-            } 
-        }
+        //private void CreateFolderButton_Click(object sender, EventArgs e)
+        //{
+        //    FolderBrowserDialog folderDlg = new FolderBrowserDialog();
+        //    folderDlg.ShowNewFolderButton = true;
+        //    // Show the FolderBrowserDialog. 
+        //    DialogResult result = folderDlg.ShowDialog();
+        //    if (result == DialogResult.OK)
+        //    {
+        //        created_folder = folderDlg.SelectedPath;
+        //        utilities.setCreatedFolder(created_folder);
+        //        MessageBox.Show(created_folder);
+        //        Environment.SpecialFolder root = folderDlg.RootFolder;
+        //    } 
+        //}
 
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
         {
@@ -138,42 +159,41 @@ namespace WindowsFormsApplication1test
 
         private void OpenFile_Click(object sender, EventArgs e)
         {
-            if (created_folder == null)
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = @"C:\";
+            openFileDialog1.Title = "Open text Files";
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.CheckPathExists = true;
+            openFileDialog1.DefaultExt = "txt";
+            openFileDialog1.Filter = "All files (*.*)|*.*|Microsoft Word (*.docx)|*.docx|txt files (*.txt)|*.txt";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show("please create folder first.");
-            }
-            else 
-            {
-                OpenFileDialog openFileDialog1 = new OpenFileDialog();
-                openFileDialog1.InitialDirectory = @"C:\";
-                openFileDialog1.Title = "Open text Files";
-                openFileDialog1.CheckFileExists = true;
-                openFileDialog1.CheckPathExists = true;
-                openFileDialog1.DefaultExt = "txt";
-                openFileDialog1.Filter = "All files (*.*)|*.*|Microsoft Word (*.docx)|*.docx|txt files (*.txt)|*.txt";
-                openFileDialog1.FilterIndex = 2;
-                openFileDialog1.RestoreDirectory = true;
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                String opened_file = openFileDialog1.FileName;
+                String[] names = opened_file.Split('\\');
+                int len = names.Length;
+                String doc_name = names[len - 1];
+                opened_file_name = doc_name;
+                int len_doc_name = doc_name.Length;
+                opened_path = opened_file.Substring(0, opened_file.Length - len_doc_name);
+                //MessageBox.Show(opened_path);
+                utilities.openWordFile(opened_file);
+                //System.Diagnostics.Process.Start("WINWORD", opened_file);
+                if (!this.newSmry)
                 {
-                    String opened_file = openFileDialog1.FileName;
-                    String[] names = opened_file.Split('\\');
-                    int len = names.Length;
-                    String doc_name = names[len - 1];
-                    opened_file_name = doc_name;
-                    int len_doc_name = doc_name.Length;
-                    opened_path = opened_file.Substring(0, opened_file.Length - len_doc_name);
-                    //MessageBox.Show(opened_path);
-                    utilities.openWordFile(opened_file);
-                    //System.Diagnostics.Process.Start("WINWORD", opened_file);
-                    bool cp_success = utilities.copyFileToRepository(doc_name, opened_path, created_folder);
-                    if (!cp_success) 
-                    {
-                        MessageBox.Show("This file already exists");
-                    }
-                    
-                    //copy_file_to_reporsitory(doc_name, opened_path, created_folder);
+                    int end_path = this.saved_path.LastIndexOf('\\');
+                    this.created_folder = saved_path.Substring(0, end_path);
                 }
+                bool cp_success = utilities.copyFileToRepository(doc_name, opened_path, this.created_folder);
+                if (!cp_success) 
+                {
+                    MessageBox.Show("This file already exists");
+                }
+                    
+                //copy_file_to_reporsitory(doc_name, opened_path, created_folder);
             }
+            
         }
 
         private void getComment(String str)

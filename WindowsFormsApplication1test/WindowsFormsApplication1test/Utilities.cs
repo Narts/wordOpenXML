@@ -19,6 +19,22 @@ namespace WindowsFormsApplication1test
         string strContent = " ";
         string created_folder;
 
+        private volatile static Utilities _instance = null;
+        private static readonly object lockHelper = new object();
+        private Utilities() { }
+        public static Utilities CreateInstance()
+        {
+            if(_instance == null)
+            {
+                lock(lockHelper)
+                {
+                    if(_instance == null)
+                        _instance = new Utilities();
+                }
+            }
+            return _instance;
+        }
+
         public static Word.Application createWordApp()
         {
             if (word_app == null)
@@ -37,10 +53,6 @@ namespace WindowsFormsApplication1test
         public static Word.Application createWordShow()
         {
             if (word_show == null)
-            {
-                word_show = new Word.Application();
-            }
-            else if (word_show.Documents.Count == 0)
             {
                 word_show = new Word.Application();
             }
@@ -86,36 +98,96 @@ namespace WindowsFormsApplication1test
             if (System.IO.File.Exists((string)strFileName))
                 System.IO.File.Delete((string)strFileName);
             Object Nothing = System.Reflection.Missing.Value;
-            word_wrt = word_app.Documents.Add(ref Nothing, ref Nothing, ref Nothing, ref Nothing);
 
+            word_wrt = word_app.Documents.Add(ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            this.writeSammary(strFileName);
+
+            try 
+            {
+                word_show.Quit(ref Nothing, ref Nothing, ref Nothing);
+                word_app.Quit(ref Nothing, ref Nothing, ref Nothing);
+            }
+            catch(Exception)
+            {
+            }
+
+            word_app = null;
+            word_show = null;
+        }
+
+        public void processWord(string saved_path)
+        {
+            word_app = createWordApp();
+            this.insertBookmark();
+            object strFileName = saved_path;
+            Object Nothing = System.Reflection.Missing.Value;
+            object readOnly = false;
+            object isVisible = false;
+
+            word_wrt = word_app.Documents.Open(ref strFileName, ref Nothing, ref readOnly,
+                    ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                    ref Nothing, ref Nothing, ref Nothing, ref isVisible, ref Nothing,
+                    ref Nothing, ref Nothing, ref Nothing);
+            word_wrt.Activate();
+            word_wrt.Paragraphs.Last.Range.Text = "test text" + "\n";//加个结束符(增加一段),否则再次插入的时候就成了替换.
+            //保存
+            word_wrt.Save();
+            try
+            {
+                word_show.Quit(ref Nothing, ref Nothing, ref Nothing);
+                word_app.Quit(ref Nothing, ref Nothing, ref Nothing);
+            }
+            catch (Exception)
+            {
+            }
+
+            word_app = null;
+            word_show = null;
+        }
+
+        private void writeSammary(object strFileName)
+        {
+            Object Nothing = System.Reflection.Missing.Value;
             #region   将数据写入到word文件中
 
             int len_doc = saved_doc_list.Count;
             for (int i = 0; i < len_doc; i++)
             {
-                strContent = "Zitat:\n\n\r ";
+                strContent = "Zitat:\r ";
+                word_wrt.Paragraphs.Last.Range.Font.Size = 12;
+                word_wrt.Paragraphs.Last.Range.Font.Bold = 1;
                 word_wrt.Paragraphs.Last.Range.Text = strContent;
 
                 string doc_content = saved_doc_list[i];
-                strContent = doc_content + "\n\n\r";
-                word_wrt.Paragraphs.Last.Range.Text = strContent;
-
-                strContent = "Kommentar:\n\n\r ";
-                word_wrt.Paragraphs.Last.Range.Text = strContent;
-
-                strContent = saved_com_list[i] + "\n\n\r";
-                word_wrt.Paragraphs.Last.Range.Text = strContent;
-
-                strContent = "Quelle:\n\n\r ";
-                word_wrt.Paragraphs.Last.Range.Text = strContent;
-
                 int len = doc_content.Length;
                 int title_pos = doc_content.LastIndexOf("(");
+
+                strContent = doc_content.Substring(0, title_pos) + "\r";
+                word_wrt.Paragraphs.Last.Range.Font.Size = 11;
+                word_wrt.Paragraphs.Last.Range.Font.Bold = 0;
+                word_wrt.Paragraphs.Last.Range.Text = strContent;
+
+                strContent = "Kommentar:\r ";
+                word_wrt.Paragraphs.Last.Range.Font.Size = 12;
+                word_wrt.Paragraphs.Last.Range.Font.Bold = 1;
+                word_wrt.Paragraphs.Last.Range.Text = strContent;
+
+                strContent = saved_com_list[i] + "\r";
+                word_wrt.Paragraphs.Last.Range.Font.Size = 11;
+                word_wrt.Paragraphs.Last.Range.Font.Bold = 0;
+                word_wrt.Paragraphs.Last.Range.Text = strContent;
+
+                strContent = "Quelle:\r ";
+                word_wrt.Paragraphs.Last.Range.Font.Size = 12;
+                word_wrt.Paragraphs.Last.Range.Font.Bold = 1;
+                word_wrt.Paragraphs.Last.Range.Text = strContent;
+
+
                 int start_index = title_pos + 1;
                 string file_name = doc_content.Substring(start_index, len - 1 - start_index);
 
                 addLink(i, file_name);
-                strContent = "\n\n\r";
+                strContent = "\r";
                 word_wrt.Paragraphs.Last.Range.Text = strContent;
             }
 
@@ -128,9 +200,6 @@ namespace WindowsFormsApplication1test
             //关闭WordDoc文档对象  
             word_wrt.Close(ref Nothing, ref Nothing, ref Nothing);
             bookmark_list.Clear();
-            //关闭WordApp组件对象  
-            word_show.Quit(ref Nothing, ref Nothing, ref Nothing);
-            //MessageBox.Show(strFileName + "\r\n " + "created successfully ");
         }
 
         public void addLink(int index, string file_name)
@@ -138,7 +207,7 @@ namespace WindowsFormsApplication1test
             try
             {
 
-                Object oMissing = System.Reflection.Missing.Value;
+                //Object Nothing = System.Reflection.Missing.Value;
                 // Word Interface
                 //Microsoft.Office.Interop.Word._Application WordApp = new Word.Application();
                 //WordApp.Visible = true;
@@ -167,19 +236,20 @@ namespace WindowsFormsApplication1test
                 //para.Range.InsertParagraphAfter();
 
                 //插入Hyperlink
-                Microsoft.Office.Interop.Word.Selection mySelection = word_app.ActiveWindow.Selection;
-                mySelection.Start = 9999;
-                mySelection.End = 9999;
+                Microsoft.Office.Interop.Word.Selection linkSelection = word_app.ActiveWindow.Selection;
+                linkSelection.Start = 9999;
+                linkSelection.End = 9999;
 
-                Microsoft.Office.Interop.Word.Range myRange = mySelection.Range;
+                Microsoft.Office.Interop.Word.Range linkRange = linkSelection.Range;
 
-                Microsoft.Office.Interop.Word.Hyperlinks myLinks = word_wrt.Hyperlinks;
-                string file_Path = created_folder + "\\" + file_name;
+                Microsoft.Office.Interop.Word.Hyperlinks bookmarksLinks = word_wrt.Hyperlinks;
+                string file_Path = this.created_folder + "\\" + file_name;
                 object linkAddr = file_Path;
                 string single_bookmark = bookmark_list[index];
                 object linkSubAddr = single_bookmark;
                 // you may need more parameters here
-                Microsoft.Office.Interop.Word.Hyperlink myLink = myLinks.Add(myRange, ref linkAddr, ref linkSubAddr);
+                Microsoft.Office.Interop.Word.Hyperlink bookmarkLink = bookmarksLinks.Add(linkRange, ref linkAddr, ref linkSubAddr);
+                bookmarkLink.Range.Font.Size = 8;
                 word_app.ActiveWindow.Selection.InsertAfter("\n");
 
                 //落款
@@ -212,7 +282,7 @@ namespace WindowsFormsApplication1test
                 int strLength = len_doc - 1 - startIndex;
                 string file_name = doc_full.Substring(startIndex, strLength);
 
-                object str_File_Name = created_folder + "\\" + file_name;
+                object str_File_Name = this.created_folder + "\\" + file_name;
                 //MessageBox.Show(targetDoc.ToString());
                 //if (System.IO.File.Exists((string)targetDoc))
                 //System.IO.File.Delete((string)targetDoc);
@@ -292,10 +362,22 @@ namespace WindowsFormsApplication1test
             word_show = createWordShow();
             object file_Name = str_File_Name;
             Object Nothing = System.Reflection.Missing.Value;
-            Word.Document word_op = word_show.Documents.Open(ref file_Name,
-                                                          ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
-                                                          ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
-                                                          ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            try
+            {
+                Word.Document word_op = word_show.Documents.Open(ref file_Name,
+                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            }
+            catch (Exception)
+            {
+                word_show = null;
+                createWordShow();
+                Word.Document word_op = word_show.Documents.Open(ref file_Name,
+                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            }
             word_show.Visible = true;
         }
 
