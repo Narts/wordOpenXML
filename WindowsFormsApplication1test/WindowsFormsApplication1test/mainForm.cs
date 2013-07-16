@@ -22,8 +22,10 @@ namespace WindowsFormsApplication1test
     {
         string saved_document;
         string saved_commentar;
+        string saved_category;
         public List<string> saved_doc_list = new List<string>();
         public List<string> saved_com_list = new List<string>();
+        public List<string> saved_cat_list = new List<string>();
         //public List<string> bookmark_list = new List<string>();
         string saved_path;
         string created_folder;
@@ -58,16 +60,20 @@ namespace WindowsFormsApplication1test
         {
             string doc = saved_document;
             string com = saved_commentar;
-            if (doc == null || com == null)
+            string cat = saved_category;
+            if (doc == null || com == null || cat == null)
             {
-                MessageBox.Show("please insert both content and comment first.");
+                MessageBox.Show("please insert content, comment and category first.");
             }
             else 
             {
+                Clipboard.SetText(richTextBox1.Rtf, TextDataFormat.Rtf);
                 saved_doc_list.Add(doc);
                 saved_com_list.Add(com);
+                saved_cat_list.Add(cat);
                 richTextBox1.Clear();
                 richTextBox2.Clear();
+                richTextBox3.Clear();
             }
            
         }
@@ -75,14 +81,17 @@ namespace WindowsFormsApplication1test
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
             string str = "";
+            string strFrmt = "";
             foreach (string line in richTextBox1.Lines)
                 str += line;
+            foreach (char rtfText in richTextBox1.Rtf)
+                strFrmt += rtfText;
             getDocument(str);
         }
 
         private void BuildSummaryBtn_Click(object sender, EventArgs e)
         {
-            if (saved_doc_list.Count == 0 || saved_com_list.Count == 0 || opened_file_name == null)
+            if (saved_doc_list.Count == 0 || saved_com_list.Count == 0 || saved_cat_list.Count == 0 || opened_file_name == null)
             {
                 MessageBox.Show("Please\n 1. Open file via 'Open File' button;\n 2. Insert content and comment via 'Insert Content' button;\n before build a summary.");
             }
@@ -90,6 +99,7 @@ namespace WindowsFormsApplication1test
             {
                 utilities.setSavedDocList(saved_doc_list);
                 utilities.setSavedComList(saved_com_list);
+                utilities.setSavedCatList(saved_cat_list);
                 if (this.newSmry)
                 {
                     MessageBox.Show(this.newSmry.ToString());
@@ -124,21 +134,6 @@ namespace WindowsFormsApplication1test
 
         }
 
-        //private void CreateFolderButton_Click(object sender, EventArgs e)
-        //{
-        //    FolderBrowserDialog folderDlg = new FolderBrowserDialog();
-        //    folderDlg.ShowNewFolderButton = true;
-        //    // Show the FolderBrowserDialog. 
-        //    DialogResult result = folderDlg.ShowDialog();
-        //    if (result == DialogResult.OK)
-        //    {
-        //        created_folder = folderDlg.SelectedPath;
-        //        utilities.setCreatedFolder(created_folder);
-        //        MessageBox.Show(created_folder);
-        //        Environment.SpecialFolder root = folderDlg.RootFolder;
-        //    } 
-        //}
-
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
         {
 
@@ -150,6 +145,14 @@ namespace WindowsFormsApplication1test
             foreach (string line in richTextBox2.Lines)
                 str += line;
             getComment(str);
+        }
+
+        private void richTextBox3_TextChanged(object sender, EventArgs e)
+        {
+            string str = "";
+            foreach (string line in richTextBox3.Lines)
+                str += line;
+            getCategory(str);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -186,6 +189,10 @@ namespace WindowsFormsApplication1test
                     int end_path = this.saved_path.LastIndexOf('\\');
                     saved_old_folder = saved_path.Substring(0, end_path);
                 }
+                else 
+                {
+                    saved_old_folder = utilities.getCreatedFolder();
+                }
                 bool cp_success = utilities.copyFileToRepository(doc_name, opened_path, saved_old_folder);
                 if (!cp_success) 
                 {
@@ -197,16 +204,31 @@ namespace WindowsFormsApplication1test
             
         }
 
-        private void getComment(String str)
+        private void getComment(string str)
         {
             saved_commentar = str;
         }
 
-        private void getDocument(String str)
+        private void getDocument(string str)
         {
             //MessageBox.Show(utilities.getActiveDocName());
             saved_document = str + "(" + utilities.getActiveDocName() + ")";
         }
+
+        private void getCategory(string str)
+        {
+            saved_category = str;
+        }
+
+        private void NextSummaryBtn_Click(object sender, EventArgs e)
+        {
+            startForm sf = new startForm();
+            this.Visible = false;
+            sf.ShowDialog();
+            sf.Visible = true;
+
+        }
+
 
         //private void copy_file_to_reporsitory(String file_name, String soure_path, String target_path)
         //{

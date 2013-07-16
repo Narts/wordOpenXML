@@ -16,12 +16,12 @@ namespace WindowsFormsApplication1test
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            startForm sf = new startForm();
-            if (sf.ShowDialog() == DialogResult.OK)
-            {
-                Application.Run(new mainForm(sf.getAddress(), sf.getNewSmry()));
-            }
-            //Application.Run(new startForm());            
+            //startForm sf = new startForm();
+            //if (sf.ShowDialog() == DialogResult.OK)
+            //{
+            //    Application.Run(new mainForm(sf.getAddress(), sf.getNewSmry()));
+            //}
+            Application.Run(new startForm());            
         }
     }
 }

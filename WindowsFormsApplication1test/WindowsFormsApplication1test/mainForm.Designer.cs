@@ -39,11 +39,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.OpenFile = new System.Windows.Forms.Button();
+            this.NextSummaryBtn = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // InsertButton
             // 
-            this.InsertButton.Location = new System.Drawing.Point(240, 433);
+            this.InsertButton.Location = new System.Drawing.Point(160, 433);
             this.InsertButton.Name = "InsertButton";
             this.InsertButton.Size = new System.Drawing.Size(108, 23);
             this.InsertButton.TabIndex = 0;
@@ -55,14 +58,14 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(12, 41);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(562, 148);
+            this.richTextBox1.Size = new System.Drawing.Size(562, 100);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // BuildSummaryBtn
             // 
-            this.BuildSummaryBtn.Location = new System.Drawing.Point(400, 433);
+            this.BuildSummaryBtn.Location = new System.Drawing.Point(316, 433);
             this.BuildSummaryBtn.Name = "BuildSummaryBtn";
             this.BuildSummaryBtn.Size = new System.Drawing.Size(108, 23);
             this.BuildSummaryBtn.TabIndex = 3;
@@ -80,9 +83,9 @@
             // 
             // richTextBox2
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(12, 234);
+            this.richTextBox2.Location = new System.Drawing.Point(12, 171);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(562, 166);
+            this.richTextBox2.Size = new System.Drawing.Size(562, 102);
             this.richTextBox2.TabIndex = 5;
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
@@ -99,7 +102,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 215);
+            this.label2.Location = new System.Drawing.Point(12, 155);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 7;
@@ -111,7 +114,7 @@
             // 
             // OpenFile
             // 
-            this.OpenFile.Location = new System.Drawing.Point(77, 433);
+            this.OpenFile.Location = new System.Drawing.Point(18, 433);
             this.OpenFile.Name = "OpenFile";
             this.OpenFile.Size = new System.Drawing.Size(108, 23);
             this.OpenFile.TabIndex = 9;
@@ -119,11 +122,42 @@
             this.OpenFile.UseVisualStyleBackColor = true;
             this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
+            // NextSummaryBtn
+            // 
+            this.NextSummaryBtn.Location = new System.Drawing.Point(456, 433);
+            this.NextSummaryBtn.Name = "NextSummaryBtn";
+            this.NextSummaryBtn.Size = new System.Drawing.Size(108, 23);
+            this.NextSummaryBtn.TabIndex = 10;
+            this.NextSummaryBtn.Text = "Next Summary";
+            this.NextSummaryBtn.UseVisualStyleBackColor = true;
+            this.NextSummaryBtn.Click += new System.EventHandler(this.NextSummaryBtn_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 289);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Category";
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(12, 305);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(562, 96);
+            this.richTextBox3.TabIndex = 12;
+            this.richTextBox3.Text = "";
+            this.richTextBox3.TextChanged += new System.EventHandler(this.richTextBox3_TextChanged);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 481);
+            this.Controls.Add(this.richTextBox3);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.NextSummaryBtn);
             this.Controls.Add(this.OpenFile);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -152,6 +186,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button OpenFile;
+        private System.Windows.Forms.Button NextSummaryBtn;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RichTextBox richTextBox3;
     }
 }
 

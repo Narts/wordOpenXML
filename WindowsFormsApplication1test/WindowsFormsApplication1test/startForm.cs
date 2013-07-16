@@ -35,7 +35,16 @@ namespace WindowsFormsApplication1test
                 utilities.setCreatedFolder(address);
                 Environment.SpecialFolder root = folderDlg.RootFolder;
             }
-            this.DialogResult = DialogResult.OK; 
+            //this.DialogResult = DialogResult.OK;
+            if (this.getAddress() != null)
+            {
+                mainForm mf = new mainForm(this.getAddress(), this.getNewSmry());
+                this.Visible = false;
+                mf.ShowDialog();
+                mf.Visible = true;
+                this.Close();
+            }
+
         }
 
         private void ProcessSummary_Click(object sender, EventArgs e)
@@ -56,7 +65,16 @@ namespace WindowsFormsApplication1test
                 int end_path = this.address.LastIndexOf('\\');
                 string created_folder = address.Substring(0, end_path);
                 utilities.setCreatedFolder(created_folder);
-                this.DialogResult = DialogResult.OK; 
+                //this.DialogResult = DialogResult.OK;
+                if (this.getAddress() != null)
+                {
+                    mainForm mf = new mainForm(this.getAddress(), this.getNewSmry());
+                    this.Visible = false;
+                    mf.ShowDialog();
+                    mf.Visible = true;
+                    this.Close();
+                }
+                
             }
             
         }

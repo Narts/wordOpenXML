@@ -12,11 +12,10 @@ namespace WindowsFormsApplication1test
         private static Microsoft.Office.Interop.Word.Application word_show = null; //new Word.Application();
         private static Microsoft.Office.Interop.Word.Application word_app = null;
         Word.Document word_wrt;
-        Word.Document word_bck;
         List<string> saved_doc_list = new List<string>();
         List<string> saved_com_list = new List<string>();
+        List<string> saved_cat_list = new List<string>();
         List<string> bookmark_list = new List<string>();
-        string strContent = " ";
         string created_folder;
 
         private volatile static Utilities _instance = null;
@@ -43,12 +42,6 @@ namespace WindowsFormsApplication1test
             }
             return word_app;
         }
-
-        //public Word.Application createWordShow()
-        //{
-        //    this.word_show = new Word.Application();
-        //    return word_show;
-        //}
 
         public static Word.Application createWordShow()
         {
@@ -92,7 +85,7 @@ namespace WindowsFormsApplication1test
         public void createWord(string saved_path)
         {
             word_app = createWordApp();
-            this.insertBookmark();
+            this.insertBookmark(saved_doc_list);
             object strFileName = saved_path;
             //MessageBox.Show(strFileName.ToString());
             if (System.IO.File.Exists((string)strFileName))
@@ -100,7 +93,19 @@ namespace WindowsFormsApplication1test
             Object Nothing = System.Reflection.Missing.Value;
 
             word_wrt = word_app.Documents.Add(ref Nothing, ref Nothing, ref Nothing, ref Nothing);
-            this.writeSammary(strFileName);
+            this.writeSammary();
+
+            //将WordDoc文档对象的内容保存为DOC文档  
+            word_wrt.SaveAs(ref strFileName, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            //关闭WordDoc文档对象  
+            word_wrt.Close(ref Nothing, ref Nothing, ref Nothing);
+            bookmark_list.Clear();
+
+
+//Test code ##
+            this.buildTOC(saved_path);
+//Test code ##
+
 
             try 
             {
@@ -118,7 +123,7 @@ namespace WindowsFormsApplication1test
         public void processWord(string saved_path)
         {
             word_app = createWordApp();
-            this.insertBookmark();
+            this.insertBookmark(saved_doc_list);
             object strFileName = saved_path;
             Object Nothing = System.Reflection.Missing.Value;
             object readOnly = false;
@@ -129,7 +134,8 @@ namespace WindowsFormsApplication1test
                     ref Nothing, ref Nothing, ref Nothing, ref isVisible, ref Nothing,
                     ref Nothing, ref Nothing, ref Nothing);
             word_wrt.Activate();
-            word_wrt.Paragraphs.Last.Range.Text = "test text" + "\n";//加个结束符(增加一段),否则再次插入的时候就成了替换.
+            //word_wrt.Paragraphs.Last.Range.Text = "test text" + "\n";//加个结束符(增加一段),否则再次插入的时候就成了替换.
+            this.writeSammary();
             //保存
             word_wrt.Save();
             try
@@ -145,14 +151,24 @@ namespace WindowsFormsApplication1test
             word_show = null;
         }
 
-        private void writeSammary(object strFileName)
+        private void writeSammary()
         {
-            Object Nothing = System.Reflection.Missing.Value;
+            //Object Nothing = System.Reflection.Missing.Value;
             #region   将数据写入到word文件中
-
+            string strContent = " ";
             int len_doc = saved_doc_list.Count;
             for (int i = 0; i < len_doc; i++)
             {
+        //test code
+                //strContent = "test: \r";
+                strContent = saved_cat_list[i] + "\r";
+                object oStyleName = Word.WdBuiltinStyle.wdStyleHeading1;  //"Heading 1";
+                word_wrt.Paragraphs.Last.Range.set_Style(ref oStyleName);
+                word_wrt.Paragraphs.Last.Range.Text = strContent;
+        //test code
+
+                oStyleName = Word.WdBuiltinStyle.wdStyleBodyText;  //"Heading 1";
+                word_wrt.Paragraphs.Last.Range.set_Style(ref oStyleName);
                 strContent = "Zitat:\r ";
                 word_wrt.Paragraphs.Last.Range.Font.Size = 12;
                 word_wrt.Paragraphs.Last.Range.Font.Bold = 1;
@@ -195,47 +211,17 @@ namespace WindowsFormsApplication1test
             saved_com_list.Clear();
             #endregion
 
-            //将WordDoc文档对象的内容保存为DOC文档  
-            word_wrt.SaveAs(ref strFileName, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
-            //关闭WordDoc文档对象  
-            word_wrt.Close(ref Nothing, ref Nothing, ref Nothing);
-            bookmark_list.Clear();
+            ////将WordDoc文档对象的内容保存为DOC文档  
+            //word_wrt.SaveAs(ref strFileName, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            ////关闭WordDoc文档对象  
+            //word_wrt.Close(ref Nothing, ref Nothing, ref Nothing);
+            //bookmark_list.Clear();
         }
 
         public void addLink(int index, string file_name)
         {
             try
             {
-
-                //Object Nothing = System.Reflection.Missing.Value;
-                // Word Interface
-                //Microsoft.Office.Interop.Word._Application WordApp = new Word.Application();
-                //WordApp.Visible = true;
-                //object filename = filePath;
-                //Microsoft.Office.Interop.Word._Document WordDoc = WordApp.Documents.Open(ref filename, ref oMissing,
-                //    ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
-                //    ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing);
-
-                //设置居左
-                //WordApp.Selection.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphLeft;
-
-                //设置文档的行间距
-                //WordApp.Selection.ParagraphFormat.LineSpacing = 15f;
-                //插入段落
-                //WordApp.Selection.TypeParagraph();
-                //Microsoft.Office.Interop.Word.Paragraph para;
-                //para = myWordDoc.Content.Paragraphs.Add(ref oMissing);
-                ////正常格式
-                //para.Range.Text = "This is paragraph 1";
-                ////para.Range.Font.Bold = 2;
-                ////para.Range.Font.Color = WdColor.wdColorRed;
-                ////para.Range.Font.Italic = 2;
-                //para.Range.InsertParagraphAfter();
-
-                //para.Range.Text = "This is paragraph 2";
-                //para.Range.InsertParagraphAfter();
-
-                //插入Hyperlink
                 Microsoft.Office.Interop.Word.Selection linkSelection = word_app.ActiveWindow.Selection;
                 linkSelection.Start = 9999;
                 linkSelection.End = 9999;
@@ -270,19 +256,20 @@ namespace WindowsFormsApplication1test
             }
         }
 
-        public void insertBookmark()
+        public void insertBookmark(List<string> doc_list)
         {
-            for (int i = 0; i < saved_doc_list.Count(); i++)
+            Word.Document word_bck;
+            for (int i = 0; i < doc_list.Count(); i++)
             {
-                string doc_full = saved_doc_list[i];
+                string doc_full = doc_list[i];
                 int len_doc = doc_full.Length;
                 int title_pos = doc_full.LastIndexOf("(");
                 string doc_content = doc_full.Substring(0, title_pos);
                 int startIndex = title_pos + 1;
                 int strLength = len_doc - 1 - startIndex;
                 string file_name = doc_full.Substring(startIndex, strLength);
-
                 object str_File_Name = this.created_folder + "\\" + file_name;
+          
                 //MessageBox.Show(targetDoc.ToString());
                 //if (System.IO.File.Exists((string)targetDoc))
                 //System.IO.File.Delete((string)targetDoc);
@@ -329,7 +316,6 @@ namespace WindowsFormsApplication1test
                 ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                 ref Nothing, ref Nothing))
             {
-
                 // insert_one_bookmark(rng, index, anotherWordDoc);
                 int start = rng.Start;
                 //end = rng.End;
@@ -381,6 +367,43 @@ namespace WindowsFormsApplication1test
             word_show.Visible = true;
         }
 
+        public void buildTOC(string string_File_Name)
+        {
+            word_app = createWordApp();
+            object str_File_Name = string_File_Name;  //this.created_folder + "\\" + "summary.docx";
+            Object Nothing = System.Reflection.Missing.Value;
+            Word.Document word_toc = word_app.Documents.Open(ref str_File_Name,
+                                          ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                          ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                          ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+            Object oTrue = true;
+
+            //SETTING THE OUTLINE LEVEL
+            //SELECT THE CONTENTS WHOSE OUTLINE LEVEL NEEDS TO BE CHANGED AND
+            //SET THE VALUE
+            word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevel2;
+            word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevel3;
+            word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevelBodyText;
+            // NAME OF THE BOOKMARK IN THE DOCUMENT (.dot Template) WHERE TABLE OF
+            // CONTENTS NEEDS TO BE ADDED
+            Word.Selection toc_pos = word_app.ActiveWindow.Selection;
+            toc_pos.Start = 0;
+            toc_pos.End = 0;
+
+            Word.Range rngTOC = toc_pos.Range;
+
+            // SELECTING THE SET RANGE
+            rngTOC.Select();
+            // INCLUDING THE TABLE OF CONTENTS
+            Object oUpperHeadingLevel = "1";
+            Object oLowerHeadingLevel = "3";
+            Object oTOCTableID = "TableOfContents";
+            word_toc.TablesOfContents.Add(rngTOC, ref oTrue, ref oUpperHeadingLevel,
+                ref oLowerHeadingLevel, ref Nothing, ref oTOCTableID, ref oTrue,
+                ref oTrue, ref Nothing, ref oTrue, ref oTrue, ref oTrue);
+            word_toc.Save();
+        }
+
         public void setCreatedFolder(string created_folder)
         {
             this.created_folder = created_folder;
@@ -409,6 +432,16 @@ namespace WindowsFormsApplication1test
         public List<string> getSavedComList()
         {
             return this.saved_com_list;
+        }
+
+        public void setSavedCatList(List<string> saved_cat_list)
+        {
+            this.saved_cat_list = saved_cat_list;
+        }
+
+        public List<string> getSavedCatList()
+        {
+            return this.saved_cat_list;
         }
 
         public void setBookmarkList(List<string> bookmark_list)
