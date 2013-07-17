@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
-            this.InsertButton = new System.Windows.Forms.Button();
+            this.InsertBtn = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.BuildSummaryBtn = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -38,7 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.OpenFile = new System.Windows.Forms.Button();
+            this.OpenFileBtn = new System.Windows.Forms.Button();
             this.NextSummaryBtn = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.richTextBox3 = new System.Windows.Forms.RichTextBox();
@@ -46,13 +46,13 @@
             // 
             // InsertButton
             // 
-            this.InsertButton.Location = new System.Drawing.Point(160, 433);
-            this.InsertButton.Name = "InsertButton";
-            this.InsertButton.Size = new System.Drawing.Size(108, 23);
-            this.InsertButton.TabIndex = 0;
-            this.InsertButton.Text = "Insert Content";
-            this.InsertButton.UseVisualStyleBackColor = true;
-            this.InsertButton.Click += new System.EventHandler(this.InsertButton_Click);
+            this.InsertBtn.Location = new System.Drawing.Point(160, 433);
+            this.InsertBtn.Name = "InsertButton";
+            this.InsertBtn.Size = new System.Drawing.Size(108, 23);
+            this.InsertBtn.TabIndex = 0;
+            this.InsertBtn.Text = "Insert Content";
+            this.InsertBtn.UseVisualStyleBackColor = true;
+            this.InsertBtn.Click += new System.EventHandler(this.InsertButton_Click);
             // 
             // richTextBox1
             // 
@@ -114,13 +114,13 @@
             // 
             // OpenFile
             // 
-            this.OpenFile.Location = new System.Drawing.Point(18, 433);
-            this.OpenFile.Name = "OpenFile";
-            this.OpenFile.Size = new System.Drawing.Size(108, 23);
-            this.OpenFile.TabIndex = 9;
-            this.OpenFile.Text = "Open File";
-            this.OpenFile.UseVisualStyleBackColor = true;
-            this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
+            this.OpenFileBtn.Location = new System.Drawing.Point(18, 433);
+            this.OpenFileBtn.Name = "OpenFile";
+            this.OpenFileBtn.Size = new System.Drawing.Size(108, 23);
+            this.OpenFileBtn.TabIndex = 9;
+            this.OpenFileBtn.Text = "Open File";
+            this.OpenFileBtn.UseVisualStyleBackColor = true;
+            this.OpenFileBtn.Click += new System.EventHandler(this.OpenFile_Click);
             // 
             // NextSummaryBtn
             // 
@@ -158,13 +158,13 @@
             this.Controls.Add(this.richTextBox3);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.NextSummaryBtn);
-            this.Controls.Add(this.OpenFile);
+            this.Controls.Add(this.OpenFileBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.BuildSummaryBtn);
             this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.InsertButton);
+            this.Controls.Add(this.InsertBtn);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "mainForm";
             this.Text = "Summary Tool";
@@ -176,7 +176,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button InsertButton;
+        private System.Windows.Forms.Button InsertBtn;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button BuildSummaryBtn;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
@@ -185,7 +185,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Button OpenFile;
+        private System.Windows.Forms.Button OpenFileBtn;
         private System.Windows.Forms.Button NextSummaryBtn;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox richTextBox3;

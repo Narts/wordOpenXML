@@ -82,7 +82,7 @@ namespace WindowsFormsApplication1test
             }
         }
 
-        public void createWord(string saved_path)
+        public void createWord(string saved_path, bool newSmry)
         {
             word_app = createWordApp();
             this.insertBookmark(saved_doc_list);
@@ -93,6 +93,15 @@ namespace WindowsFormsApplication1test
             Object Nothing = System.Reflection.Missing.Value;
 
             word_wrt = word_app.Documents.Add(ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+
+            object oStyleName = Word.WdBuiltinStyle.wdStyleBodyText;  //"Heading 1";
+            word_wrt.Paragraphs.Last.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            word_wrt.Paragraphs.Last.Range.set_Style(ref oStyleName);
+            string strContent = "Schlüsselwörter \r";
+            word_wrt.Paragraphs.Last.Range.Font.Size = 14;
+            word_wrt.Paragraphs.Last.Range.Font.Bold = 1;
+            word_wrt.Paragraphs.Last.Range.Text = strContent;
+
             this.writeSammary();
 
             //将WordDoc文档对象的内容保存为DOC文档  
@@ -103,7 +112,7 @@ namespace WindowsFormsApplication1test
 
 
 //Test code ##
-            this.buildTOC(saved_path);
+            this.buildTOC(saved_path, newSmry);
 //Test code ##
 
 
@@ -120,7 +129,7 @@ namespace WindowsFormsApplication1test
             word_show = null;
         }
 
-        public void processWord(string saved_path)
+        public void processWord(string saved_path, bool newSmry)
         {
             word_app = createWordApp();
             this.insertBookmark(saved_doc_list);
@@ -138,6 +147,11 @@ namespace WindowsFormsApplication1test
             this.writeSammary();
             //保存
             word_wrt.Save();
+
+   // test code
+            this.buildTOC(saved_path, newSmry);
+   // test code
+
             try
             {
                 word_show.Quit(ref Nothing, ref Nothing, ref Nothing);
@@ -156,9 +170,11 @@ namespace WindowsFormsApplication1test
             //Object Nothing = System.Reflection.Missing.Value;
             #region   将数据写入到word文件中
             string strContent = " ";
+            
             int len_doc = saved_doc_list.Count;
             for (int i = 0; i < len_doc; i++)
             {
+                //word_wrt.Paragraphs.Last.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphLeft;
         //test code
                 //strContent = "test: \r";
                 strContent = saved_cat_list[i] + "\r";
@@ -209,6 +225,7 @@ namespace WindowsFormsApplication1test
 
             saved_doc_list.Clear();
             saved_com_list.Clear();
+            saved_cat_list.Clear();
             #endregion
 
             ////将WordDoc文档对象的内容保存为DOC文档  
@@ -367,8 +384,9 @@ namespace WindowsFormsApplication1test
             word_show.Visible = true;
         }
 
-        public void buildTOC(string string_File_Name)
+        public void buildTOC(string string_File_Name, bool newSmry)
         {
+//TODO: try if process old TOC or build new TOC
             word_app = createWordApp();
             object str_File_Name = string_File_Name;  //this.created_folder + "\\" + "summary.docx";
             Object Nothing = System.Reflection.Missing.Value;
@@ -376,31 +394,39 @@ namespace WindowsFormsApplication1test
                                           ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                           ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                           ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
-            Object oTrue = true;
+            if (newSmry)
+            {
+                Object oTrue = true;
+                //SETTING THE OUTLINE LEVEL
+                //SELECT THE CONTENTS WHOSE OUTLINE LEVEL NEEDS TO BE CHANGED AND
+                //SET THE VALUE
+                word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevel2;
+                word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevel3;
+                word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevelBodyText;
+                // NAME OF THE BOOKMARK IN THE DOCUMENT (.dot Template) WHERE TABLE OF
+                // CONTENTS NEEDS TO BE ADDED
+                Word.Selection toc_pos = word_app.ActiveWindow.Selection;
+                toc_pos.Start = 16;
+                toc_pos.End = 16;
 
-            //SETTING THE OUTLINE LEVEL
-            //SELECT THE CONTENTS WHOSE OUTLINE LEVEL NEEDS TO BE CHANGED AND
-            //SET THE VALUE
-            word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevel2;
-            word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevel3;
-            word_app.Selection.Paragraphs.OutlineLevel = Word.WdOutlineLevel.wdOutlineLevelBodyText;
-            // NAME OF THE BOOKMARK IN THE DOCUMENT (.dot Template) WHERE TABLE OF
-            // CONTENTS NEEDS TO BE ADDED
-            Word.Selection toc_pos = word_app.ActiveWindow.Selection;
-            toc_pos.Start = 0;
-            toc_pos.End = 0;
+                Word.Range rngTOC = toc_pos.Range;
 
-            Word.Range rngTOC = toc_pos.Range;
+                // SELECTING THE SET RANGE
+                rngTOC.Select();
+                // INCLUDING THE TABLE OF CONTENTS
+                Object oUpperHeadingLevel = "1";
+                Object oLowerHeadingLevel = "3";
+                Object oTOCTableID = "TableOfContents";
+                word_toc.TablesOfContents.Add(rngTOC, ref oTrue, ref oUpperHeadingLevel,
+                    ref oLowerHeadingLevel, ref Nothing, ref oTOCTableID, ref oTrue,
+                    ref oTrue, ref Nothing, ref oTrue, ref oTrue, ref oTrue);
+            }
+            else 
+            {
+                word_toc.TablesOfContents[1].Update();
+            }
 
-            // SELECTING THE SET RANGE
-            rngTOC.Select();
-            // INCLUDING THE TABLE OF CONTENTS
-            Object oUpperHeadingLevel = "1";
-            Object oLowerHeadingLevel = "3";
-            Object oTOCTableID = "TableOfContents";
-            word_toc.TablesOfContents.Add(rngTOC, ref oTrue, ref oUpperHeadingLevel,
-                ref oLowerHeadingLevel, ref Nothing, ref oTOCTableID, ref oTrue,
-                ref oTrue, ref Nothing, ref oTrue, ref oTrue, ref oTrue);
+
             word_toc.Save();
         }
 

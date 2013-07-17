@@ -93,7 +93,7 @@ namespace WindowsFormsApplication1test
         {
             if (saved_doc_list.Count == 0 || saved_com_list.Count == 0 || saved_cat_list.Count == 0 || opened_file_name == null)
             {
-                MessageBox.Show("Please\n 1. Open file via 'Open File' button;\n 2. Insert content and comment via 'Insert Content' button;\n before build a summary.");
+                MessageBox.Show("Please\n 1. Open file via 'Open File' button;\n 2. Insert content, comment and category via 'Insert Content' button;\n before build a summary.");
             }
             else 
             {
@@ -117,16 +117,22 @@ namespace WindowsFormsApplication1test
                     {
                         saved_path = saveFileDialog1.FileName;
                         MessageBox.Show(saved_path);
-                        utilities.createWord(saved_path);
+                        utilities.createWord(saved_path, this.newSmry);
                     }
+                    OpenFileBtn.Enabled = false;
+                    InsertBtn.Enabled = false;
+                    BuildSummaryBtn.Enabled = false;
                 }
                 else 
                 {
                     MessageBox.Show("newSmry == false");
-                    utilities.processWord(saved_path);
+                    utilities.processWord(saved_path, this.newSmry);
+                    OpenFileBtn.Enabled = false;
+                    InsertBtn.Enabled = false;
+                    BuildSummaryBtn.Enabled = false;
                 }
 
-            } 
+            }
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -180,7 +186,7 @@ namespace WindowsFormsApplication1test
                 opened_file_name = doc_name;
                 int len_doc_name = doc_name.Length;
                 opened_path = opened_file.Substring(0, opened_file.Length - len_doc_name);
-                //MessageBox.Show(opened_path);
+                MessageBox.Show(opened_file);
                 utilities.openWordFile(opened_file);
                 //System.Diagnostics.Process.Start("WINWORD", opened_file);
                 string saved_old_folder = "";
