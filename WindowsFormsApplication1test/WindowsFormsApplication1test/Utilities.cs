@@ -374,14 +374,24 @@ namespace WindowsFormsApplication1test
             }
             catch (Exception)
             {
-                word_show = null;
-                createWordShow();
+                try
+                {
+                    word_show = null;
+                    createWordShow();
+                    Word.Document word_op = word_show.Documents.Open(ref file_Name,
+                                                                  ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                                  ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                                  ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+                }
+                catch(Exception)
+                {
+                    word_show = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application") as Word.Application;
+                    Word.Document word_op = word_show.Documents.Open(ref file_Name,
+                                                                  ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                                  ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
+                                                                  ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
+                }
 
-                word_show = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application") as Word.Application;
-                Word.Document word_op = word_show.Documents.Open(ref file_Name,
-                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
-                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
-                                                              ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
             }
             word_show.Visible = true;
         }
