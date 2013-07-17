@@ -374,9 +374,10 @@ namespace WindowsFormsApplication1test
             }
             catch (Exception)
             {
+                word_show = null;
+                createWordShow();
+
                 word_show = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application") as Word.Application;
-                //word_show = null;
-                //createWordShow();
                 Word.Document word_op = word_show.Documents.Open(ref file_Name,
                                                               ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                                               ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
