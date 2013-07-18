@@ -108,7 +108,6 @@ namespace WindowsFormsApplication1test
             word_wrt.SaveAs(ref strFileName, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing);
             //关闭WordDoc文档对象  
             word_wrt.Close(ref Nothing, ref Nothing, ref Nothing);
-            bookmark_list.Clear();
 
 
 //Test code ##
@@ -226,6 +225,7 @@ namespace WindowsFormsApplication1test
             saved_doc_list.Clear();
             saved_com_list.Clear();
             saved_cat_list.Clear();
+            bookmark_list.Clear();
             #endregion
 
             ////将WordDoc文档对象的内容保存为DOC文档  
@@ -355,7 +355,15 @@ namespace WindowsFormsApplication1test
 
         public string getActiveDocName()
         {
-            word_show = createWordShow();
+            try
+            {
+                word_show = createWordShow();
+            }
+            catch(Exception)
+            {
+                word_show = null;
+                word_show = createWordShow();
+            }
             return word_show.ActiveWindow.Document.Name;
             //return word_app.ActiveDocument.Name;
         }
@@ -376,8 +384,9 @@ namespace WindowsFormsApplication1test
             {
                 try
                 {
+                    //word_show.Quit();
                     word_show = null;
-                    createWordShow();
+                    word_show = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application") as Word.Application;
                     Word.Document word_op = word_show.Documents.Open(ref file_Name,
                                                                   ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                                                   ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
@@ -385,7 +394,9 @@ namespace WindowsFormsApplication1test
                 }
                 catch(Exception)
                 {
-                    word_show = System.Runtime.InteropServices.Marshal.GetActiveObject("Word.Application") as Word.Application;
+                    //word_show.Quit();
+                    word_show = null;
+                    createWordShow();
                     Word.Document word_op = word_show.Documents.Open(ref file_Name,
                                                                   ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                                                   ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
